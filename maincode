@@ -1,0 +1,47 @@
+#include <Wire.h>
+
+// Sensor Pin definitions
+const int MQ135_PIN = A0;  // Pin for MQ-135 Sensor
+const int PM25_PIN = A1;   // Pin for PM 2.5 Sensor
+const int relayPin = 8;    // Relay for controlling the fan
+
+void setup() {
+  pinMode(relayPin, OUTPUT);          // Set relay pin as output
+  digitalWrite(relayPin, LOW);        // Keep the fan off initially
+  Serial.begin(9600);                 // Start Serial communication
+}
+
+void loop() {
+  int mq135_val = analogRead(MQ135_PIN);  // Read the MQ-135 sensor value (unfiltered air)
+  int pm25_val = analogRead(PM25_PIN);    // Read the PM 2.5 sensor value (unfiltered air)
+  
+  // Simulate purified air data by reducing the sensor values (you can adjust this based on your system's effectiveness)
+  int purified_mq135_val = mq135_val * 0.7;  // Simulating purification by reducing the value by 30%
+  int purified_pm25_val = pm25_val * 0.7;    // Simulating purification by reducing the value by 30%
+
+  // Display data on the Serial Monitor
+  Serial.println("==== Air Purification System ====");
+  Serial.print("Unfiltered MQ-135 Value (Before Purification): ");
+  Serial.println(mq135_val);
+  
+  Serial.print("Unfiltered PM 2.5 Value (Before Purification): ");
+  Serial.println(pm25_val);
+
+  Serial.print("Purified MQ-135 Value (After Purification): ");
+  Serial.println(purified_mq135_val);
+  
+  Serial.print("Purified PM 2.5 Value (After Purification): ");
+  Serial.println(purified_pm25_val);
+
+  // Turn on the fan if pollution is above threshold
+  if (mq135_val > 100|| pm25_val > 100) {
+    digitalWrite(relayPin, LOW);  // Turn on the fan
+    Serial.println("Fan ON: Air purification in progress...");
+    delay(3000);
+  } else {
+    digitalWrite(relayPin, HIGH);   // Turn off the fan
+    Serial.println("Fan OFF: Air quality is good.");
+  }
+
+  delay(3000);  // Wait 3 second before next reading
+}
