@@ -30,7 +30,6 @@ This system:
 4. Clean air is released
 
 ## 📷 Prototype
-(Add your project images here)
 
 ## 🚀 Future Enhancements
 - ☀️ Solar-powered system for energy efficiency
